@@ -13,8 +13,11 @@ struct ContentView: View {
                 HistoryView()
                     .tag(1)
 
-                SettingsView()
+                ThemeView()
                     .tag(2)
+
+                SettingsView()
+                    .tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
@@ -22,16 +25,17 @@ struct ContentView: View {
             HStack(spacing: 0) {
                 tabButton(icon: "house.fill", label: "Today", tag: 0)
                 tabButton(icon: "clock.fill", label: "History", tag: 1)
-                tabButton(icon: "gearshape.fill", label: "Settings", tag: 2)
+                tabButton(icon: "paintpalette.fill", label: "Themes", tag: 2)
+                tabButton(icon: "gearshape.fill", label: "Settings", tag: 3)
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 25)
                     .fill(.ultraThinMaterial)
                     .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
             )
-            .padding(.horizontal, 40)
+            .padding(.horizontal, 24)
             .padding(.bottom, 20)
         }
     }
@@ -44,9 +48,9 @@ struct ContentView: View {
         }) {
             VStack(spacing: 4) {
                 Image(systemName: icon)
-                    .font(.system(size: 20))
+                    .font(.system(size: 18))
                 Text(label)
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.system(size: 10, weight: .medium))
             }
             .foregroundColor(selectedTab == tag ? .white : .white.opacity(0.5))
             .frame(maxWidth: .infinity)

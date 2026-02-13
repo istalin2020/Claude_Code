@@ -3,10 +3,12 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var viewModel: WordsViewModel
     @State private var isAnimating = false
+    @State private var shareImage: UIImage? = nil
+    @State private var showShareSheet = false
 
     var body: some View {
         ZStack {
-            BackgroundView(dayOfYear: viewModel.todaysDayNumber)
+            ThemeBackgroundView(theme: viewModel.selectedTheme)
 
             ScrollView {
                 VStack(spacing: 24) {
@@ -20,7 +22,7 @@ struct HomeView: View {
                             .shadow(color: .black.opacity(0.3), radius: 5)
 
                         Text("Jesus Words")
-                            .font(.system(size: 32, weight: .bold, design: .serif))
+                            .font(.system(size: 32, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                             .foregroundColor(.white)
                             .shadow(color: .black.opacity(0.3), radius: 5)
 
@@ -37,7 +39,7 @@ struct HomeView: View {
                             HStack {
                                 Text(word.categoryEmoji)
                                 Text(word.categoryDisplay)
-                                    .font(.system(size: 14, weight: .semibold))
+                                    .font(.system(size: 14, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                             }
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
@@ -47,7 +49,7 @@ struct HomeView: View {
 
                             // Theme
                             Text(word.theme)
-                                .font(.system(size: 18, weight: .bold, design: .serif))
+                                .font(.system(size: 18, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                                 .foregroundColor(.white)
 
                             // Divider
@@ -57,7 +59,7 @@ struct HomeView: View {
 
                             // Quote
                             Text("\u{201C}\(word.quote)\u{201D}")
-                                .font(.system(size: 20, weight: .medium, design: .serif))
+                                .font(.system(size: 20, weight: .medium, design: viewModel.selectedTheme.fontDesign))
                                 .foregroundColor(.white)
                                 .multilineTextAlignment(.center)
                                 .lineSpacing(6)
@@ -65,7 +67,7 @@ struct HomeView: View {
 
                             // Reference
                             Text("— \(word.reference)")
-                                .font(.system(size: 16, weight: .semibold, design: .serif))
+                                .font(.system(size: 16, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                                 .foregroundColor(.white.opacity(0.85))
                                 .italic()
                         }
@@ -81,15 +83,19 @@ struct HomeView: View {
                         .animation(.easeOut(duration: 0.8), value: isAnimating)
                     }
 
-                    // Share Button
+                    // Share as Image Button
                     if let word = viewModel.todaysWord {
-                        ShareLink(
-                            item: "\u{201C}\(word.quote)\u{201D} — \(word.reference)\n\nShared from Jesus Words App \u{271D}\u{FE0F}",
-                            subject: Text("Jesus Words - \(word.theme)"),
-                            message: Text(word.quote)
-                        ) {
+                        Button(action: {
+                            shareImage = ShareImageRenderer.renderImage(
+                                word: word,
+                                theme: viewModel.selectedTheme
+                            )
+                            if shareImage != nil {
+                                showShareSheet = true
+                            }
+                        }) {
                             HStack {
-                                Image(systemName: "square.and.arrow.up")
+                                Image(systemName: "photo.on.rectangle.angled")
                                 Text("Share This Blessing")
                             }
                             .font(.system(size: 16, weight: .semibold))
@@ -116,5 +122,21 @@ struct HomeView: View {
                 isAnimating = true
             }
         }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = shareImage {
+                ShareSheet(activityItems: [image])
+            }
+        }
     }
+}
+
+// UIKit share sheet wrapper
+struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

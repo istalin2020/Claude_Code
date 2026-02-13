@@ -6,13 +6,13 @@ struct HistoryView: View {
 
     var body: some View {
         ZStack {
-            BackgroundView(dayOfYear: viewModel.todaysDayNumber)
+            ThemeBackgroundView(theme: viewModel.selectedTheme)
 
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 8) {
                     Text("History")
-                        .font(.system(size: 32, weight: .bold, design: .serif))
+                        .font(.system(size: 32, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white)
                     Text("Your Daily Blessings")
                         .font(.subheadline)
@@ -39,7 +39,7 @@ struct HistoryView: View {
                     ScrollView {
                         LazyVStack(spacing: 12) {
                             ForEach(viewModel.history) { entry in
-                                HistoryCard(entry: entry)
+                                HistoryCard(entry: entry, fontDesign: viewModel.selectedTheme.fontDesign)
                                     .onTapGesture {
                                         selectedEntry = entry
                                     }
@@ -53,12 +53,14 @@ struct HistoryView: View {
         }
         .sheet(item: $selectedEntry) { entry in
             HistoryDetailView(entry: entry)
+                .environmentObject(viewModel)
         }
     }
 }
 
 struct HistoryCard: View {
     let entry: HistoryEntry
+    var fontDesign: Font.Design = .serif
 
     private var dateString: String {
         let formatter = DateFormatter()
@@ -71,7 +73,7 @@ struct HistoryCard: View {
             HStack {
                 Text(entry.word.categoryEmoji)
                 Text(entry.word.categoryDisplay)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold, design: fontDesign))
                     .foregroundColor(.white.opacity(0.8))
                 Spacer()
                 Text(dateString)
@@ -80,17 +82,17 @@ struct HistoryCard: View {
             }
 
             Text(entry.word.theme)
-                .font(.system(size: 16, weight: .bold, design: .serif))
+                .font(.system(size: 16, weight: .bold, design: fontDesign))
                 .foregroundColor(.white)
 
             Text("\u{201C}\(entry.word.quote)\u{201D}")
-                .font(.system(size: 14, design: .serif))
+                .font(.system(size: 14, design: fontDesign))
                 .foregroundColor(.white.opacity(0.9))
                 .lineLimit(3)
                 .lineSpacing(3)
 
             Text("— \(entry.word.reference)")
-                .font(.system(size: 13, weight: .medium, design: .serif))
+                .font(.system(size: 13, weight: .medium, design: fontDesign))
                 .foregroundColor(.white.opacity(0.7))
                 .italic()
         }
@@ -105,10 +107,13 @@ struct HistoryCard: View {
 struct HistoryDetailView: View {
     let entry: HistoryEntry
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var viewModel: WordsViewModel
+    @State private var shareImage: UIImage? = nil
+    @State private var showShareSheet = false
 
     var body: some View {
         ZStack {
-            BackgroundView(dayOfYear: entry.word.day)
+            ThemeBackgroundView(theme: viewModel.selectedTheme)
 
             VStack(spacing: 20) {
                 HStack {
@@ -128,11 +133,11 @@ struct HistoryDetailView: View {
                         .font(.system(size: 44))
 
                     Text(entry.word.categoryDisplay)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 16, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white.opacity(0.8))
 
                     Text(entry.word.theme)
-                        .font(.system(size: 24, weight: .bold, design: .serif))
+                        .font(.system(size: 24, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white)
 
                     Rectangle()
@@ -140,14 +145,14 @@ struct HistoryDetailView: View {
                         .frame(width: 60, height: 2)
 
                     Text("\u{201C}\(entry.word.quote)\u{201D}")
-                        .font(.system(size: 22, weight: .medium, design: .serif))
+                        .font(.system(size: 22, weight: .medium, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .lineSpacing(8)
                         .padding(.horizontal, 20)
 
                     Text("— \(entry.word.reference)")
-                        .font(.system(size: 18, weight: .semibold, design: .serif))
+                        .font(.system(size: 18, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white.opacity(0.85))
                         .italic()
 
@@ -168,13 +173,19 @@ struct HistoryDetailView: View {
                 )
                 .padding(.horizontal, 20)
 
-                // Share button
-                ShareLink(
-                    item: "\u{201C}\(entry.word.quote)\u{201D} — \(entry.word.reference)\n\nShared from Jesus Words App \u{271D}\u{FE0F}"
-                ) {
+                // Share as Image button
+                Button(action: {
+                    shareImage = ShareImageRenderer.renderImage(
+                        word: entry.word,
+                        theme: viewModel.selectedTheme
+                    )
+                    if shareImage != nil {
+                        showShareSheet = true
+                    }
+                }) {
                     HStack {
-                        Image(systemName: "square.and.arrow.up")
-                        Text("Share")
+                        Image(systemName: "photo.on.rectangle.angled")
+                        Text("Share as Image")
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)
@@ -184,6 +195,11 @@ struct HistoryDetailView: View {
                 }
 
                 Spacer()
+            }
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = shareImage {
+                ShareSheet(activityItems: [image])
             }
         }
     }

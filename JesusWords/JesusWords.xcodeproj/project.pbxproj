@@ -19,6 +19,9 @@
 		A10000010000000000000010 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000010; };
 		A10000010000000000000011 /* jesus_words.json in Resources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000011; };
 		A10000010000000000000012 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000012; };
+		A10000010000000000000013 /* ThemeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000013; };
+		A10000010000000000000014 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000014; };
+		A10000010000000000000015 /* ShareImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000015; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +38,9 @@
 		A10000020000000000000010 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		A10000020000000000000011 /* jesus_words.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = jesus_words.json; sourceTree = "<group>"; };
 		A10000020000000000000012 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A10000020000000000000013 /* ThemeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModel.swift; sourceTree = "<group>"; };
+		A10000020000000000000014 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
+		A10000020000000000000015 /* ShareImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000020000000000000003 /* JesusWord.swift */,
+				A10000020000000000000013 /* ThemeModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -95,6 +102,8 @@
 				A10000020000000000000006 /* ReminderSetupView.swift */,
 				A10000020000000000000007 /* SettingsView.swift */,
 				A10000020000000000000008 /* BackgroundView.swift */,
+				A10000020000000000000014 /* ThemeView.swift */,
+				A10000020000000000000015 /* ShareImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -198,6 +207,9 @@
 				A10000010000000000000008 /* BackgroundView.swift in Sources */,
 				A10000010000000000000009 /* WordsViewModel.swift in Sources */,
 				A10000010000000000000010 /* NotificationManager.swift in Sources */,
+				A10000010000000000000013 /* ThemeModel.swift in Sources */,
+				A10000010000000000000014 /* ThemeView.swift in Sources */,
+				A10000010000000000000015 /* ShareImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

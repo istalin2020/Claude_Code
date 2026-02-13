@@ -7,14 +7,14 @@ struct SettingsView: View {
 
     var body: some View {
         ZStack {
-            BackgroundView(dayOfYear: viewModel.todaysDayNumber)
+            ThemeBackgroundView(theme: viewModel.selectedTheme)
 
             ScrollView {
                 VStack(spacing: 24) {
                     // Header
                     VStack(spacing: 8) {
                         Text("Settings")
-                            .font(.system(size: 32, weight: .bold, design: .serif))
+                            .font(.system(size: 32, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                             .foregroundColor(.white)
                         Text("Customize your experience")
                             .font(.subheadline)
@@ -28,7 +28,7 @@ struct SettingsView: View {
                             Image(systemName: "bell.fill")
                                 .foregroundColor(.white)
                             Text("Reminder Time")
-                                .font(.system(size: 18, weight: .semibold, design: .serif))
+                                .font(.system(size: 18, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                                 .foregroundColor(.white)
                             Spacer()
                         }
@@ -67,13 +67,13 @@ struct SettingsView: View {
                             Image(systemName: "info.circle.fill")
                                 .foregroundColor(.white)
                             Text("About")
-                                .font(.system(size: 18, weight: .semibold, design: .serif))
+                                .font(.system(size: 18, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                                 .foregroundColor(.white)
                             Spacer()
                         }
 
                         Text("Jesus Words brings you 365 authentic spoken words of Jesus Christ from the New Testament. Start each day with His wisdom, comfort, and encouragement.")
-                            .font(.system(size: 14, design: .serif))
+                            .font(.system(size: 14, design: viewModel.selectedTheme.fontDesign))
                             .foregroundColor(.white.opacity(0.8))
                             .lineSpacing(4)
 

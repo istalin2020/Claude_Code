@@ -7,6 +7,7 @@ class WordsViewModel: ObservableObject {
     @Published var history: [HistoryEntry] = []
     @Published var reminderHour: Int = 7
     @Published var reminderMinute: Int = 0
+    @Published var themeManager = ThemeManager.shared
 
     private let historyKey = "viewedWordsHistory"
     private let lastDayKey = "lastShownDay"
@@ -15,6 +16,15 @@ class WordsViewModel: ObservableObject {
         loadWords()
         loadHistory()
         loadTodaysWord()
+    }
+
+    var selectedTheme: AppTheme {
+        themeManager.selectedTheme
+    }
+
+    func selectTheme(_ theme: AppTheme) {
+        themeManager.selectedThemeId = theme.id
+        objectWillChange.send()
     }
 
     func loadWords() {

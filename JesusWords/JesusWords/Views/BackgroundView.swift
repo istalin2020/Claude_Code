@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Original gradient-based background (used as fallback)
 struct BackgroundView: View {
     let dayOfYear: Int
 
@@ -67,6 +68,70 @@ struct BackgroundView: View {
                     .scaledToFit()
                     .frame(width: 200, height: 200)
                     .foregroundColor(.white.opacity(0.06))
+                    .rotationEffect(.degrees(-15))
+                Spacer()
+            }
+
+            // Light rays effect
+            GeometryReader { geo in
+                Path { path in
+                    let center = CGPoint(x: geo.size.width * 0.75, y: -50)
+                    for i in stride(from: 0, to: 360, by: 30) {
+                        let angle = Double(i) * .pi / 180
+                        let length = max(geo.size.width, geo.size.height) * 1.5
+                        path.move(to: center)
+                        path.addLine(to: CGPoint(
+                            x: center.x + cos(angle) * length,
+                            y: center.y + sin(angle) * length
+                        ))
+                    }
+                }
+                .stroke(Color.white.opacity(0.03), lineWidth: 40)
+            }
+            .ignoresSafeArea()
+        }
+    }
+}
+
+// Theme-based background view
+struct ThemeBackgroundView: View {
+    let theme: AppTheme
+
+    var body: some View {
+        ZStack {
+            // Main gradient
+            LinearGradient(
+                gradient: Gradient(colors: theme.gradientColors),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            // Decorative overlay elements
+            GeometryReader { geo in
+                ForEach(Array(theme.overlayElements.enumerated()), id: \.offset) { _, overlay in
+                    Image(systemName: overlay.systemIcon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: overlay.size, height: overlay.size)
+                        .foregroundColor(.white.opacity(overlay.opacity))
+                        .rotationEffect(.degrees(overlay.rotation))
+                        .position(
+                            x: geo.size.width * overlay.xOffset,
+                            y: geo.size.height * overlay.yOffset
+                        )
+                }
+            }
+            .ignoresSafeArea()
+
+            // Cross watermark
+            VStack {
+                Spacer()
+                Image(systemName: "cross.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .foregroundColor(.white.opacity(0.04))
                     .rotationEffect(.degrees(-15))
                 Spacer()
             }
