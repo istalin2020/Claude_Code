@@ -101,7 +101,7 @@ struct ShareImageView: View {
 
             Spacer().frame(height: size.height * 0.03)
 
-            // Bottom branding with app icon at left
+            // Bottom branding with app icon at bottom left
             bottomBranding
 
             Spacer().frame(height: size.height * 0.035)
@@ -215,12 +215,17 @@ struct ShareImageView: View {
             .foregroundColor(.white.opacity(0.80))
     }
 
-    // MARK: - Bottom Branding (App Icon at bottom left)
+    // MARK: - Bottom Branding (Actual App Icon at bottom left)
 
     private var bottomBranding: some View {
         HStack(spacing: 14) {
-            // Use the actual generated app icon from asset catalog
-            AppIconView(theme: theme)
+            // Load the actual app icon PNG from the ShareAppIcon image asset
+            Image("ShareAppIcon")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .shadow(color: .black.opacity(0.3), radius: 6, y: 3)
 
             VStack(alignment: .leading, spacing: 3) {
                 Text("Jesus Words")
@@ -232,114 +237,6 @@ struct ShareImageView: View {
             }
 
             Spacer()
-        }
-    }
-}
-
-// MARK: - App Icon View (Jesus with Sheep, Cross Background, Holy Spirit Dove)
-
-struct AppIconView: View {
-    let theme: AppTheme
-
-    var body: some View {
-        ZStack {
-            iconBackground
-            crossInBackground
-            jesusWithSheep
-            holySpiritDove
-        }
-        .frame(width: 100, height: 100)
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .shadow(color: .black.opacity(0.3), radius: 6, y: 3)
-    }
-
-    private var iconBackground: some View {
-        LinearGradient(
-            colors: [
-                Color(red: 0.22, green: 0.08, blue: 0.33),
-                Color(red: 0.40, green: 0.12, blue: 0.39),
-                Color(red: 0.66, green: 0.24, blue: 0.31),
-                Color(red: 0.88, green: 0.63, blue: 0.18)
-            ],
-            startPoint: .center,
-            endPoint: .init(x: 1.0, y: 1.0)
-        )
-    }
-
-    // Cross in the background
-    private var crossInBackground: some View {
-        ZStack {
-            // Vertical beam
-            RoundedRectangle(cornerRadius: 2)
-                .fill(Color(red: 0.82, green: 0.67, blue: 0.25).opacity(0.85))
-                .frame(width: 12, height: 72)
-                .offset(y: -2)
-
-            // Horizontal beam
-            RoundedRectangle(cornerRadius: 2)
-                .fill(Color(red: 0.82, green: 0.67, blue: 0.25).opacity(0.85))
-                .frame(width: 46, height: 11)
-                .offset(y: -20)
-
-            // Glow behind cross
-            Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [
-                            Color(red: 1.0, green: 0.92, blue: 0.60).opacity(0.25),
-                            Color.clear
-                        ],
-                        center: .center,
-                        startRadius: 0,
-                        endRadius: 35
-                    )
-                )
-                .frame(width: 70, height: 70)
-                .offset(y: -14)
-        }
-    }
-
-    // Jesus figure with sheep
-    private var jesusWithSheep: some View {
-        ZStack {
-            // Jesus figure
-            Image(systemName: "figure.stand")
-                .font(.system(size: 34, weight: .medium))
-                .foregroundColor(Color(red: 0.25, green: 0.14, blue: 0.10).opacity(0.85))
-                .offset(x: -2, y: 8)
-
-            // Sheep
-            Image(systemName: "hare.fill")
-                .font(.system(size: 14))
-                .foregroundColor(.white.opacity(0.65))
-                .offset(x: 18, y: 24)
-        }
-    }
-
-    // Holy Spirit dove
-    private var holySpiritDove: some View {
-        ZStack {
-            // Glow behind dove
-            Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [
-                            Color.white.opacity(0.35),
-                            Color.clear
-                        ],
-                        center: .center,
-                        startRadius: 0,
-                        endRadius: 15
-                    )
-                )
-                .frame(width: 30, height: 30)
-                .offset(y: -38)
-
-            // Dove
-            Image(systemName: "bird.fill")
-                .font(.system(size: 16, weight: .bold))
-                .foregroundColor(.white.opacity(0.90))
-                .offset(y: -38)
         }
     }
 }
