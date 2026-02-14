@@ -1,27 +1,27 @@
 import SwiftUI
 
-// MARK: - Share Image View (1080x1350 — 4:5 IG Portrait)
+// MARK: - Share Image View (1080x1080 — Square IG Post)
 
 struct ShareImageView: View {
     let word: JesusWord
     let theme: AppTheme
     let size: CGSize
 
-    /// Adaptive font size based on quote length
+    /// Adaptive font size based on quote length (3x scaled for image rendering)
     private var quoteFontSize: CGFloat {
         let length = word.quote.count
-        if length < 80 { return 36 }
-        if length < 150 { return 30 }
-        if length < 250 { return 26 }
-        if length < 400 { return 22 }
-        return 20
+        if length < 80 { return 96 }
+        if length < 150 { return 80 }
+        if length < 250 { return 68 }
+        if length < 400 { return 58 }
+        return 52
     }
 
     private var quoteLineSpacing: CGFloat {
         let length = word.quote.count
-        if length < 150 { return 14 }
-        if length < 300 { return 10 }
-        return 8
+        if length < 150 { return 36 }
+        if length < 300 { return 28 }
+        return 22
     }
 
     var body: some View {
@@ -52,7 +52,7 @@ struct ShareImageView: View {
             Image(systemName: overlay.systemIcon)
                 .resizable()
                 .scaledToFit()
-                .frame(width: overlay.size * 1.5, height: overlay.size * 1.5)
+                .frame(width: overlay.size * 2.0, height: overlay.size * 2.0)
                 .foregroundColor(.white.opacity(overlay.opacity))
                 .rotationEffect(.degrees(overlay.rotation))
                 .position(
@@ -68,7 +68,7 @@ struct ShareImageView: View {
         Image(systemName: "cross.fill")
             .resizable()
             .scaledToFit()
-            .frame(width: 300, height: 300)
+            .frame(width: 400, height: 400)
             .foregroundColor(.white.opacity(0.04))
             .rotationEffect(.degrees(-15))
             .position(x: size.width * 0.5, y: size.height * 0.45)
@@ -89,72 +89,72 @@ struct ShareImageView: View {
                 ))
             }
         }
-        .stroke(Color.white.opacity(0.04), lineWidth: 35)
+        .stroke(Color.white.opacity(0.04), lineWidth: 50)
     }
 
     // MARK: - Content Layout
 
     private var contentLayout: some View {
         VStack(spacing: 0) {
-            Spacer().frame(height: size.height * 0.06)
+            Spacer().frame(height: size.height * 0.05)
             topCrossIcon
-            Spacer().frame(height: 20)
+            Spacer().frame(height: 30)
             categoryBadge
-            Spacer().frame(height: 18)
+            Spacer().frame(height: 24)
             themeTitle
-            Spacer().frame(height: 14)
+            Spacer().frame(height: 20)
             decorativeDivider
             Spacer()
             quoteText
             Spacer()
             referenceText
-            Spacer().frame(height: size.height * 0.06)
+            Spacer().frame(height: size.height * 0.05)
             bottomBranding
             Spacer().frame(height: size.height * 0.04)
         }
-        .padding(.horizontal, 48)
+        .padding(.horizontal, 72)
     }
 
     private var topCrossIcon: some View {
         Image(systemName: "cross.fill")
-            .font(.system(size: 36))
+            .font(.system(size: 96))
             .foregroundColor(.white.opacity(0.9))
-            .shadow(color: .black.opacity(0.3), radius: 6)
+            .shadow(color: .black.opacity(0.3), radius: 8)
     }
 
     private var categoryBadge: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 12) {
             Text(word.categoryEmoji)
-                .font(.system(size: 18))
+                .font(.system(size: 48))
             Text(word.categoryDisplay)
-                .font(.system(size: 16, weight: .semibold, design: theme.fontDesign))
+                .font(.system(size: 42, weight: .semibold, design: theme.fontDesign))
                 .foregroundColor(.white)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 40)
+        .padding(.vertical, 18)
         .background(Color.white.opacity(0.20))
         .clipShape(Capsule())
     }
 
     private var themeTitle: some View {
         Text(word.theme)
-            .font(.system(size: 24, weight: .bold, design: theme.fontDesign))
+            .font(.system(size: 64, weight: .bold, design: theme.fontDesign))
             .foregroundColor(.white)
             .multilineTextAlignment(.center)
-            .shadow(color: .black.opacity(0.2), radius: 3)
+            .shadow(color: .black.opacity(0.2), radius: 4)
     }
 
     private var decorativeDivider: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 14) {
             Rectangle()
                 .fill(Color.white.opacity(0.3))
-                .frame(width: 40, height: 1.5)
+                .frame(width: 80, height: 3)
             Image(systemName: "sparkle")
-                .font(.system(size: 10))
+                .font(.system(size: 24))
                 .foregroundColor(.white.opacity(0.5))
             Rectangle()
                 .fill(Color.white.opacity(0.3))
-                .frame(width: 40, height: 1.5)
+                .frame(width: 80, height: 3)
         }
     }
 
@@ -164,12 +164,12 @@ struct ShareImageView: View {
             .foregroundColor(.white)
             .multilineTextAlignment(.center)
             .lineSpacing(quoteLineSpacing)
-            .shadow(color: .black.opacity(0.15), radius: 2)
+            .shadow(color: .black.opacity(0.15), radius: 3)
     }
 
     private var referenceText: some View {
         Text("— \(word.reference)")
-            .font(.system(size: 20, weight: .semibold, design: theme.fontDesign))
+            .font(.system(size: 52, weight: .semibold, design: theme.fontDesign))
             .foregroundColor(.white.opacity(0.85))
             .italic()
     }
@@ -177,15 +177,15 @@ struct ShareImageView: View {
     // MARK: - Bottom Branding (App Icon + App Name)
 
     private var bottomBranding: some View {
-        HStack {
+        HStack(spacing: 16) {
             AppIconView(theme: theme)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text("Jesus Words")
-                    .font(.system(size: 15, weight: .bold, design: theme.fontDesign))
+                    .font(.system(size: 40, weight: .bold, design: theme.fontDesign))
                     .foregroundColor(.white)
                 Text("Daily Blessings")
-                    .font(.system(size: 10))
+                    .font(.system(size: 26))
                     .foregroundColor(.white.opacity(0.6))
             }
 
@@ -206,9 +206,9 @@ struct AppIconView: View {
             jesusWithSheep
             holySpiritDove
         }
-        .frame(width: 52, height: 52)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .shadow(color: .black.opacity(0.3), radius: 4, y: 2)
+        .frame(width: 120, height: 120)
+        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .shadow(color: .black.opacity(0.3), radius: 6, y: 3)
     }
 
     private var iconBackground: some View {
@@ -227,16 +227,16 @@ struct AppIconView: View {
     private var crossInBackground: some View {
         ZStack {
             // Vertical beam
-            RoundedRectangle(cornerRadius: 1)
+            RoundedRectangle(cornerRadius: 2)
                 .fill(Color.white.opacity(0.15))
-                .frame(width: 6, height: 38)
-                .offset(y: -2)
+                .frame(width: 14, height: 88)
+                .offset(y: -4)
 
             // Horizontal beam
-            RoundedRectangle(cornerRadius: 1)
+            RoundedRectangle(cornerRadius: 2)
                 .fill(Color.white.opacity(0.15))
-                .frame(width: 22, height: 5)
-                .offset(y: -10)
+                .frame(width: 50, height: 12)
+                .offset(y: -24)
 
             // Glow behind cross
             Circle()
@@ -248,11 +248,11 @@ struct AppIconView: View {
                         ],
                         center: .center,
                         startRadius: 0,
-                        endRadius: 18
+                        endRadius: 40
                     )
                 )
-                .frame(width: 36, height: 36)
-                .offset(y: -8)
+                .frame(width: 80, height: 80)
+                .offset(y: -18)
         }
     }
 
@@ -261,21 +261,21 @@ struct AppIconView: View {
         ZStack {
             // Jesus figure (person)
             Image(systemName: "figure.stand")
-                .font(.system(size: 18, weight: .medium))
+                .font(.system(size: 40, weight: .medium))
                 .foregroundColor(Color(red: 1.0, green: 0.92, blue: 0.70))
-                .offset(x: -3, y: 4)
+                .offset(x: -6, y: 8)
 
             // Sheep (small figure beside Jesus)
             Image(systemName: "hare.fill")
-                .font(.system(size: 8))
+                .font(.system(size: 18))
                 .foregroundColor(.white.opacity(0.7))
-                .offset(x: 10, y: 12)
+                .offset(x: 22, y: 28)
 
             // Second small sheep
             Image(systemName: "hare.fill")
-                .font(.system(size: 6))
+                .font(.system(size: 14))
                 .foregroundColor(.white.opacity(0.5))
-                .offset(x: 16, y: 10)
+                .offset(x: 36, y: 22)
         }
     }
 
@@ -292,17 +292,17 @@ struct AppIconView: View {
                         ],
                         center: .center,
                         startRadius: 0,
-                        endRadius: 8
+                        endRadius: 18
                     )
                 )
-                .frame(width: 16, height: 16)
-                .offset(y: -18)
+                .frame(width: 36, height: 36)
+                .offset(y: -42)
 
             // Dove
             Image(systemName: "bird.fill")
-                .font(.system(size: 9, weight: .bold))
+                .font(.system(size: 20, weight: .bold))
                 .foregroundColor(.white.opacity(0.95))
-                .offset(y: -18)
+                .offset(y: -42)
         }
     }
 }
@@ -312,7 +312,7 @@ struct AppIconView: View {
 struct ShareImageRenderer {
     @MainActor
     static func renderImage(word: JesusWord, theme: AppTheme) -> UIImage? {
-        let size = CGSize(width: 1080, height: 1350) // 4:5 IG Portrait
+        let size = CGSize(width: 1080, height: 1080) // Square IG Post
         let view = ShareImageView(word: word, theme: theme, size: size)
         let renderer = ImageRenderer(content: view)
         renderer.scale = 1.0

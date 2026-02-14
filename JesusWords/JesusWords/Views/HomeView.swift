@@ -25,10 +25,6 @@ struct HomeView: View {
                             .font(.system(size: 32, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                             .foregroundColor(.white)
                             .shadow(color: .black.opacity(0.3), radius: 5)
-
-                        Text("Day \(viewModel.todaysDayNumber) of 365")
-                            .font(.subheadline)
-                            .foregroundColor(.white.opacity(0.8))
                     }
                     .padding(.top, 10)
 
