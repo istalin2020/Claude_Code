@@ -6,6 +6,7 @@ struct ShareImageView: View {
     let word: JesusWord
     let theme: AppTheme
     let size: CGSize
+    let appIconImage: UIImage?
 
     /// Adaptive font size based on quote length (scaled for 1080 image rendering)
     private var quoteFontSize: CGFloat {
@@ -219,13 +220,15 @@ struct ShareImageView: View {
 
     private var bottomBranding: some View {
         HStack(spacing: 14) {
-            // Load the actual app icon PNG from the ShareAppIcon image asset
-            Image("ShareAppIcon")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                .shadow(color: .black.opacity(0.3), radius: 6, y: 3)
+            // Use UIImage-based loading for ImageRenderer compatibility
+            if let uiImage = appIconImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                    .shadow(color: .black.opacity(0.3), radius: 6, y: 3)
+            }
 
             VStack(alignment: .leading, spacing: 3) {
                 Text("Jesus Words")
@@ -244,10 +247,16 @@ struct ShareImageView: View {
 // MARK: - Image Renderer
 
 struct ShareImageRenderer {
+    /// Load the app icon as UIImage (asset catalog Image() doesn't work with ImageRenderer)
+    private static func loadAppIcon() -> UIImage? {
+        UIImage(named: "ShareAppIcon")
+    }
+
     @MainActor
     static func renderImage(word: JesusWord, theme: AppTheme) -> UIImage? {
         let size = CGSize(width: 1080, height: 1080) // Square IG Post
-        let view = ShareImageView(word: word, theme: theme, size: size)
+        let appIcon = loadAppIcon()
+        let view = ShareImageView(word: word, theme: theme, size: size, appIconImage: appIcon)
         let renderer = ImageRenderer(content: view)
         renderer.scale = 1.0
         return renderer.uiImage
@@ -256,7 +265,8 @@ struct ShareImageRenderer {
     @MainActor
     static func renderSquareImage(word: JesusWord, theme: AppTheme) -> UIImage? {
         let size = CGSize(width: 1080, height: 1080) // Square post size
-        let view = ShareImageView(word: word, theme: theme, size: size)
+        let appIcon = loadAppIcon()
+        let view = ShareImageView(word: word, theme: theme, size: size, appIconImage: appIcon)
         let renderer = ImageRenderer(content: view)
         renderer.scale = 1.0
         return renderer.uiImage
