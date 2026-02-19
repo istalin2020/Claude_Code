@@ -22,6 +22,7 @@
 		A10000010000000000000013 /* ThemeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000013; };
 		A10000010000000000000014 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000014; };
 		A10000010000000000000015 /* ShareImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000015; };
+		A10000010000000000000016 /* LatinCrossShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000016; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		A10000020000000000000013 /* ThemeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModel.swift; sourceTree = "<group>"; };
 		A10000020000000000000014 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		A10000020000000000000015 /* ShareImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareImageView.swift; sourceTree = "<group>"; };
+		A10000020000000000000016 /* LatinCrossShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatinCrossShape.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				A10000020000000000000008 /* BackgroundView.swift */,
 				A10000020000000000000014 /* ThemeView.swift */,
 				A10000020000000000000015 /* ShareImageView.swift */,
+				A10000020000000000000016 /* LatinCrossShape.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -210,6 +213,7 @@
 				A10000010000000000000013 /* ThemeModel.swift in Sources */,
 				A10000010000000000000014 /* ThemeView.swift in Sources */,
 				A10000010000000000000015 /* ShareImageView.swift in Sources */,
+				A10000010000000000000016 /* LatinCrossShape.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
