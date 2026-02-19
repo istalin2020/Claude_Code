@@ -63,11 +63,10 @@ struct BackgroundView: View {
             // Decorative cross watermark
             VStack {
                 Spacer()
-                Image(systemName: "cross.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .foregroundColor(.white.opacity(0.06))
+                LatinCrossShape()
+                    .fill(Color.white.opacity(0.06))
+                    .aspectRatio(0.55, contentMode: .fit)
+                    .frame(height: 200)
                     .rotationEffect(.degrees(-15))
                 Spacer()
             }
@@ -110,9 +109,7 @@ struct ThemeBackgroundView: View {
             // Decorative overlay elements
             GeometryReader { geo in
                 ForEach(Array(theme.overlayElements.enumerated()), id: \.offset) { _, overlay in
-                    Image(systemName: overlay.systemIcon)
-                        .resizable()
-                        .scaledToFit()
+                    ThemeIcon(systemName: overlay.systemIcon)
                         .frame(width: overlay.size, height: overlay.size)
                         .foregroundColor(.white.opacity(overlay.opacity))
                         .rotationEffect(.degrees(overlay.rotation))
@@ -127,11 +124,10 @@ struct ThemeBackgroundView: View {
             // Cross watermark
             VStack {
                 Spacer()
-                Image(systemName: "cross.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .foregroundColor(.white.opacity(0.04))
+                LatinCrossShape()
+                    .fill(Color.white.opacity(0.04))
+                    .aspectRatio(0.55, contentMode: .fit)
+                    .frame(height: 200)
                     .rotationEffect(.degrees(-15))
                 Spacer()
             }

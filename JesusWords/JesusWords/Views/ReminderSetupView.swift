@@ -27,8 +27,7 @@ struct ReminderSetupView: View {
         VStack(spacing: 24) {
             Spacer()
 
-            Image(systemName: "cross.fill")
-                .font(.system(size: 70))
+            LatinCrossIcon(size: 70)
                 .foregroundColor(.white)
                 .shadow(color: .white.opacity(0.3), radius: 20)
 

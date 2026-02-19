@@ -16,8 +16,7 @@ struct HomeView: View {
 
                     // App Title
                     VStack(spacing: 4) {
-                        Image(systemName: "cross.fill")
-                            .font(.system(size: 36))
+                        LatinCrossIcon(size: 36)
                             .foregroundColor(.white)
                             .shadow(color: .black.opacity(0.3), radius: 5)
 

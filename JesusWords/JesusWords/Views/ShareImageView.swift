@@ -50,9 +50,7 @@ struct ShareImageView: View {
 
     private var decorativeOverlays: some View {
         ForEach(Array(theme.overlayElements.enumerated()), id: \.offset) { _, overlay in
-            Image(systemName: overlay.systemIcon)
-                .resizable()
-                .scaledToFit()
+            ThemeIcon(systemName: overlay.systemIcon)
                 .frame(width: overlay.size * 2.0, height: overlay.size * 2.0)
                 .foregroundColor(.white.opacity(overlay.opacity))
                 .rotationEffect(.degrees(overlay.rotation))
@@ -111,8 +109,7 @@ struct ShareImageView: View {
     }
 
     private var topCrossIcon: some View {
-        Image(systemName: "cross.fill")
-            .font(.system(size: 72))
+        LatinCrossIcon(size: 72)
             .foregroundColor(.white.opacity(0.92))
             .shadow(color: .black.opacity(0.25), radius: 6)
     }

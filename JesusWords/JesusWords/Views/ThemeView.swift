@@ -181,9 +181,7 @@ struct ThemePreviewCard: View {
     }
 
     private func overlayIcon(overlay: ThemeOverlay, size: CGSize) -> some View {
-        Image(systemName: overlay.systemIcon)
-            .resizable()
-            .scaledToFit()
+        ThemeIcon(systemName: overlay.systemIcon)
             .frame(width: overlay.size * 0.5, height: overlay.size * 0.5)
             .foregroundColor(.white.opacity(overlay.opacity * 2))
             .rotationEffect(.degrees(overlay.rotation))
@@ -200,8 +198,7 @@ struct ThemePreviewCard: View {
                 .foregroundColor(.white.opacity(0.9))
                 .shadow(color: .black.opacity(0.3), radius: 4)
 
-            Image(systemName: "cross.fill")
-                .font(.system(size: 14))
+            LatinCrossIcon(size: 14)
                 .foregroundColor(.white.opacity(0.6))
         }
     }
