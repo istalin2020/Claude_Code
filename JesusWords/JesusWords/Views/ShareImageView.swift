@@ -83,7 +83,7 @@ struct ShareImageView: View {
 
     private var contentLayout: some View {
         VStack(spacing: 0) {
-            Spacer().frame(height: size.height * 0.04)
+            Spacer().frame(height: size.height * 0.08)
 
             // Top cross icon
             topCrossIcon
@@ -103,7 +103,7 @@ struct ShareImageView: View {
             // Bottom branding with app icon at bottom left
             bottomBranding
 
-            Spacer().frame(height: size.height * 0.035)
+            Spacer().frame(height: size.height * 0.07)
         }
         .padding(.horizontal, 52)
     }
