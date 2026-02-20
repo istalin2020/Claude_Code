@@ -83,8 +83,6 @@ struct ShareImageView: View {
 
     private var contentLayout: some View {
         VStack(spacing: 0) {
-            Spacer().frame(height: size.height * 0.08)
-
             // Top cross icon
             topCrossIcon
 
@@ -93,19 +91,19 @@ struct ShareImageView: View {
             // "Jesus Words" title
             jesusWordsTitle
 
-            Spacer().frame(height: size.height * 0.03)
+            Spacer().frame(height: size.height * 0.025)
 
             // Main card with quote content
             quoteCard
 
-            Spacer().frame(height: size.height * 0.03)
+            Spacer().frame(height: size.height * 0.025)
 
             // Bottom branding with app icon at bottom left
             bottomBranding
-
-            Spacer().frame(height: size.height * 0.07)
         }
         .padding(.horizontal, 52)
+        .padding(.top, size.height * 0.07)
+        .padding(.bottom, size.height * 0.06)
     }
 
     private var topCrossIcon: some View {
