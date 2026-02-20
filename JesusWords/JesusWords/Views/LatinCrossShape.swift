@@ -55,6 +55,7 @@ struct LatinCrossIcon: View {
 struct ThemeIcon: View {
     let systemName: String
 
+    @ViewBuilder
     var body: some View {
         if systemName == "cross.fill" {
             LatinCrossShape()

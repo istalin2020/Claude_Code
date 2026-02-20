@@ -135,6 +135,18 @@ struct ThemePreviewCard: View {
     let isSelected: Bool
     let isAnimating: Bool
 
+    private var shadowColor: Color {
+        isSelected ? Color.white.opacity(0.2) : Color.black.opacity(0.15)
+    }
+
+    private var shadowRadius: CGFloat {
+        isSelected ? 12 : 6
+    }
+
+    private var shadowY: CGFloat {
+        isSelected ? 2 : 4
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             previewImage
@@ -142,11 +154,7 @@ struct ThemePreviewCard: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(borderOverlay)
-        .shadow(
-            color: isSelected ? Color.white.opacity(0.2) : Color.black.opacity(0.15),
-            radius: isSelected ? 12 : 6,
-            y: isSelected ? 2 : 4
-        )
+        .shadow(color: shadowColor, radius: shadowRadius, y: shadowY)
         .scaleEffect(isAnimating ? 0.92 : 1.0)
         .overlay(checkmarkOverlay)
     }
