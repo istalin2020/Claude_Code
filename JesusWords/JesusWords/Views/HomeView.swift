@@ -1,10 +1,14 @@
 import SwiftUI
 
+struct ShareableImage: Identifiable {
+    let id = UUID()
+    let image: UIImage
+}
+
 struct HomeView: View {
     @EnvironmentObject var viewModel: WordsViewModel
     @State private var isAnimating = false
-    @State private var shareImage: UIImage? = nil
-    @State private var showShareSheet = false
+    @State private var shareableImage: ShareableImage? = nil
 
     var body: some View {
         ZStack {
@@ -81,12 +85,11 @@ struct HomeView: View {
                     // Share as Image Button
                     if let word = viewModel.todaysWord {
                         Button(action: {
-                            shareImage = ShareImageRenderer.renderImage(
+                            if let rendered = ShareImageRenderer.renderImage(
                                 word: word,
                                 theme: viewModel.selectedTheme
-                            )
-                            if shareImage != nil {
-                                showShareSheet = true
+                            ) {
+                                shareableImage = ShareableImage(image: rendered)
                             }
                         }) {
                             HStack {
@@ -117,10 +120,8 @@ struct HomeView: View {
                 isAnimating = true
             }
         }
-        .sheet(isPresented: $showShareSheet) {
-            if let image = shareImage {
-                ShareSheet(activityItems: [image])
-            }
+        .sheet(item: $shareableImage) { item in
+            ShareSheet(activityItems: [item.image])
         }
     }
 }
