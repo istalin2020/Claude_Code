@@ -108,8 +108,7 @@ struct HistoryDetailView: View {
     let entry: HistoryEntry
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var viewModel: WordsViewModel
-    @State private var shareImage: UIImage? = nil
-    @State private var showShareSheet = false
+    @State private var shareableImage: ShareableImage? = nil
 
     var body: some View {
         ZStack {
@@ -175,12 +174,11 @@ struct HistoryDetailView: View {
 
                 // Share as Image button
                 Button(action: {
-                    shareImage = ShareImageRenderer.renderImage(
+                    if let rendered = ShareImageRenderer.renderImage(
                         word: entry.word,
                         theme: viewModel.selectedTheme
-                    )
-                    if shareImage != nil {
-                        showShareSheet = true
+                    ) {
+                        shareableImage = ShareableImage(image: rendered)
                     }
                 }) {
                     HStack {
@@ -197,10 +195,8 @@ struct HistoryDetailView: View {
                 Spacer()
             }
         }
-        .sheet(isPresented: $showShareSheet) {
-            if let image = shareImage {
-                ShareSheet(activityItems: [image])
-            }
+        .sheet(item: $shareableImage) { item in
+            ShareSheet(activityItems: [item.image])
         }
     }
 }

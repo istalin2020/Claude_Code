@@ -8,22 +8,69 @@ struct ShareImageView: View {
     let size: CGSize
     let appIconImage: UIImage?
 
-    /// Adaptive font size based on quote length (scaled for 1080 image rendering)
+    /// Adaptive font sizes based on quote length — scales everything down for long quotes
     private var quoteFontSize: CGFloat {
         let length = word.quote.count
         if length < 80 { return 72 }
         if length < 120 { return 64 }
-        if length < 180 { return 56 }
-        if length < 280 { return 48 }
-        if length < 400 { return 42 }
-        return 36
+        if length < 180 { return 52 }
+        if length < 280 { return 42 }
+        if length < 400 { return 34 }
+        return 26
     }
 
     private var quoteLineSpacing: CGFloat {
         let length = word.quote.count
         if length < 120 { return 28 }
-        if length < 250 { return 22 }
+        if length < 180 { return 20 }
+        if length < 280 { return 14 }
+        return 10
+    }
+
+    private var themeTitleFontSize: CGFloat {
+        let length = word.quote.count
+        if length < 180 { return 52 }
+        if length < 280 { return 44 }
+        if length < 400 { return 38 }
+        return 32
+    }
+
+    private var referenceFontSize: CGFloat {
+        let length = word.quote.count
+        if length < 180 { return 40 }
+        if length < 280 { return 34 }
+        if length < 400 { return 28 }
+        return 24
+    }
+
+    private var categoryFontSize: CGFloat {
+        let length = word.quote.count
+        if length < 280 { return 32 }
+        if length < 400 { return 28 }
+        return 24
+    }
+
+    private var categoryEmojiSize: CGFloat {
+        let length = word.quote.count
+        if length < 280 { return 36 }
+        if length < 400 { return 30 }
+        return 26
+    }
+
+    private var cardInternalPadding: CGFloat {
+        let length = word.quote.count
+        if length < 180 { return 36 }
+        if length < 280 { return 28 }
+        if length < 400 { return 22 }
         return 16
+    }
+
+    private var cardItemSpacing: CGFloat {
+        let length = word.quote.count
+        if length < 180 { return 20 }
+        if length < 280 { return 16 }
+        if length < 400 { return 12 }
+        return 8
     }
 
     var body: some View {
@@ -123,27 +170,27 @@ struct ShareImageView: View {
 
     private var quoteCard: some View {
         VStack(spacing: 0) {
-            Spacer().frame(height: 36)
+            Spacer().frame(height: cardInternalPadding)
 
             categoryBadge
 
-            Spacer().frame(height: 20)
+            Spacer().frame(height: cardItemSpacing)
 
             themeTitle
 
-            Spacer().frame(height: 16)
+            Spacer().frame(height: cardItemSpacing * 0.8)
 
             decorativeDivider
 
-            Spacer().frame(height: 24)
+            Spacer().frame(height: cardItemSpacing)
 
             quoteText
 
-            Spacer().frame(height: 24)
+            Spacer().frame(height: cardItemSpacing)
 
             referenceText
 
-            Spacer().frame(height: 36)
+            Spacer().frame(height: cardInternalPadding)
         }
         .padding(.horizontal, 40)
         .frame(maxWidth: .infinity)
@@ -160,9 +207,9 @@ struct ShareImageView: View {
     private var categoryBadge: some View {
         HStack(spacing: 10) {
             Text(word.categoryEmoji)
-                .font(.system(size: 36))
+                .font(.system(size: categoryEmojiSize))
             Text(word.categoryDisplay)
-                .font(.system(size: 32, weight: .semibold, design: .serif))
+                .font(.system(size: categoryFontSize, weight: .semibold, design: .serif))
                 .foregroundColor(.white)
         }
         .padding(.horizontal, 28)
@@ -173,7 +220,7 @@ struct ShareImageView: View {
 
     private var themeTitle: some View {
         Text(word.theme)
-            .font(.system(size: 52, weight: .bold, design: .serif))
+            .font(.system(size: themeTitleFontSize, weight: .bold, design: .serif))
             .foregroundColor(.white)
             .multilineTextAlignment(.center)
             .shadow(color: .black.opacity(0.15), radius: 3)
@@ -206,7 +253,7 @@ struct ShareImageView: View {
 
     private var referenceText: some View {
         Text("— \(word.reference)")
-            .font(.system(size: 40, weight: .semibold, design: .serif))
+            .font(.system(size: referenceFontSize, weight: .semibold, design: .serif))
             .italic()
             .foregroundColor(.white.opacity(0.80))
     }
