@@ -12,38 +12,36 @@ class NotificationManager: ObservableObject {
         }
     }
 
-    func scheduleDailyNotification(hour: Int, minute: Int, quote: String, reference: String) {
+    /// Schedule notifications for the next 7 days, each with the correct word for that day.
+    func scheduleDailyNotifications(hour: Int, minute: Int, allWords: [JesusWord]) {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
 
-        // Schedule notifications for the next 7 days
+        guard !allWords.isEmpty else { return }
+
         for dayOffset in 0..<7 {
+            guard let futureDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: Date()) else { continue }
+
+            // Calculate the correct word for this specific future date
+            let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: futureDate) ?? 1
+            let wordIndex = (dayOfYear - 1) % allWords.count
+            let word = allWords[wordIndex]
+
             let content = UNMutableNotificationContent()
             content.title = "✝️ Jesus Words"
-            content.subtitle = reference
-            content.body = quote
+            content.subtitle = word.reference
+            content.body = word.quote
             content.sound = .default
             content.badge = 1
 
-            var dateComponents = DateComponents()
+            // Use exact date (year/month/day/hour/minute) — non-repeating
+            var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: futureDate)
             dateComponents.hour = hour
             dateComponents.minute = minute
 
-            if dayOffset == 0 {
-                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-                let request = UNNotificationRequest(identifier: "jesuswords-daily", content: content, trigger: trigger)
-                center.add(request)
-            } else {
-                guard let futureDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: Date()) else { continue }
-                let futureComponents = Calendar.current.dateComponents([.year, .month, .day], from: futureDate)
-                dateComponents.year = futureComponents.year
-                dateComponents.month = futureComponents.month
-                dateComponents.day = futureComponents.day
-
-                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-                let request = UNNotificationRequest(identifier: "jesuswords-day-\(dayOffset)", content: content, trigger: trigger)
-                center.add(request)
-            }
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let request = UNNotificationRequest(identifier: "jesuswords-day-\(dayOffset)", content: content, trigger: trigger)
+            center.add(request)
         }
     }
 

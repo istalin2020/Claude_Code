@@ -61,16 +61,14 @@ class WordsViewModel: ObservableObject {
             }
         }
 
-        // Schedule notification with today's word
-        if let word = todaysWord {
-            let hour = UserDefaults.standard.integer(forKey: "reminderHour")
-            let minute = UserDefaults.standard.integer(forKey: "reminderMinute")
-            if hour > 0 || minute > 0 {
-                NotificationManager.shared.scheduleDailyNotification(
-                    hour: hour, minute: minute,
-                    quote: word.quote, reference: word.reference
-                )
-            }
+        // Schedule notifications with correct word for each future day
+        let hour = UserDefaults.standard.integer(forKey: "reminderHour")
+        let minute = UserDefaults.standard.integer(forKey: "reminderMinute")
+        if hour > 0 || minute > 0 {
+            NotificationManager.shared.scheduleDailyNotifications(
+                hour: hour, minute: minute,
+                allWords: allWords
+            )
         }
     }
 
@@ -93,12 +91,10 @@ class WordsViewModel: ObservableObject {
         UserDefaults.standard.set(hour, forKey: "reminderHour")
         UserDefaults.standard.set(minute, forKey: "reminderMinute")
 
-        if let word = todaysWord {
-            NotificationManager.shared.scheduleDailyNotification(
-                hour: hour, minute: minute,
-                quote: word.quote, reference: word.reference
-            )
-        }
+        NotificationManager.shared.scheduleDailyNotifications(
+            hour: hour, minute: minute,
+            allWords: allWords
+        )
     }
 
     var todaysDayNumber: Int {
