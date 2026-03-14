@@ -7,6 +7,9 @@ struct JesusWord: Codable, Identifiable, Equatable {
     let quote: String
     let reference: String
     let theme: String
+    let tamilQuote: String?
+    let explanation: String?
+    let tamilExplanation: String?
 
     var categoryDisplay: String {
         switch category {
@@ -18,6 +21,20 @@ struct JesusWord: Codable, Identifiable, Equatable {
         case "YouAreBlessed": return "You Are Blessed"
         case "PrayYouWillGet": return "Pray & Receive"
         case "ParableMoral": return "Parable Wisdom"
+        default: return category
+        }
+    }
+
+    var tamilCategoryDisplay: String {
+        switch category {
+        case "DontBeAfraid": return "பயப்படாதே"
+        case "DontBeSad": return "கவலைப்படாதே"
+        case "YouCanDoIt": return "உன்னால் முடியும்"
+        case "IAmThereForYou": return "நான் உனக்காக இருக்கிறேன்"
+        case "DontWorry": return "கவலைப்படாதே"
+        case "YouAreBlessed": return "நீ ஆசீர்வதிக்கப்பட்டவன்"
+        case "PrayYouWillGet": return "ஜெபி, பெறுவாய்"
+        case "ParableMoral": return "உவமை ஞானம்"
         default: return category
         }
     }

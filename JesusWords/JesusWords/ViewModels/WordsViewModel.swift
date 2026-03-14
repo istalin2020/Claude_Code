@@ -1,6 +1,11 @@
 import Foundation
 import SwiftUI
 
+enum AppLanguage: String, CaseIterable {
+    case english = "English"
+    case tamil = "தமிழ்"
+}
+
 class WordsViewModel: ObservableObject {
     @Published var allWords: [JesusWord] = []
     @Published var todaysWord: JesusWord?
@@ -8,11 +13,14 @@ class WordsViewModel: ObservableObject {
     @Published var reminderHour: Int = 7
     @Published var reminderMinute: Int = 0
     @Published var themeManager = ThemeManager.shared
+    @Published var selectedLanguage: AppLanguage = .english
 
     private let historyKey = "viewedWordsHistory"
     private let lastDayKey = "lastShownDay"
+    private let languageKey = "selectedLanguage"
 
     init() {
+        loadLanguage()
         loadWords()
         loadHistory()
         loadTodaysWord()
@@ -25,6 +33,18 @@ class WordsViewModel: ObservableObject {
     func selectTheme(_ theme: AppTheme) {
         themeManager.selectedThemeId = theme.id
         objectWillChange.send()
+    }
+
+    func setLanguage(_ language: AppLanguage) {
+        selectedLanguage = language
+        UserDefaults.standard.set(language.rawValue, forKey: languageKey)
+    }
+
+    private func loadLanguage() {
+        if let saved = UserDefaults.standard.string(forKey: languageKey),
+           let language = AppLanguage(rawValue: saved) {
+            selectedLanguage = language
+        }
     }
 
     func loadWords() {
