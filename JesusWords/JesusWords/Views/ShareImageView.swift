@@ -7,10 +7,25 @@ struct ShareImageView: View {
     let theme: AppTheme
     let size: CGSize
     let appIconImage: UIImage?
+    var language: AppLanguage = .english
+
+    private var displayQuote: String {
+        if language == .tamil, let tq = word.tamilQuote { return tq }
+        return word.quote
+    }
+
+    private var displayTheme: String {
+        if language == .tamil, let tt = word.tamilTheme { return tt }
+        return word.theme
+    }
+
+    private var displayCategory: String {
+        language == .tamil ? word.tamilCategoryDisplay : word.categoryDisplay
+    }
 
     /// Adaptive font sizes based on quote length — scales everything down for long quotes
     private var quoteFontSize: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 80 { return 72 }
         if length < 120 { return 64 }
         if length < 180 { return 52 }
@@ -20,7 +35,7 @@ struct ShareImageView: View {
     }
 
     private var quoteLineSpacing: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 120 { return 28 }
         if length < 180 { return 20 }
         if length < 280 { return 14 }
@@ -28,7 +43,7 @@ struct ShareImageView: View {
     }
 
     private var themeTitleFontSize: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 180 { return 52 }
         if length < 280 { return 44 }
         if length < 400 { return 38 }
@@ -36,7 +51,7 @@ struct ShareImageView: View {
     }
 
     private var referenceFontSize: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 180 { return 40 }
         if length < 280 { return 34 }
         if length < 400 { return 28 }
@@ -44,21 +59,21 @@ struct ShareImageView: View {
     }
 
     private var categoryFontSize: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 280 { return 32 }
         if length < 400 { return 28 }
         return 24
     }
 
     private var categoryEmojiSize: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 280 { return 36 }
         if length < 400 { return 30 }
         return 26
     }
 
     private var cardInternalPadding: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 180 { return 36 }
         if length < 280 { return 28 }
         if length < 400 { return 22 }
@@ -66,7 +81,7 @@ struct ShareImageView: View {
     }
 
     private var cardItemSpacing: CGFloat {
-        let length = word.quote.count
+        let length = displayQuote.count
         if length < 180 { return 20 }
         if length < 280 { return 16 }
         if length < 400 { return 12 }
@@ -160,7 +175,7 @@ struct ShareImageView: View {
     }
 
     private var jesusWordsTitle: some View {
-        Text("Jesus Words")
+        Text(language == .tamil ? "இயேசுவின் வார்த்தைகள்" : "Jesus Words")
             .font(.system(size: 56, weight: .bold, design: .serif))
             .foregroundColor(.white)
             .shadow(color: .black.opacity(0.2), radius: 4)
@@ -208,7 +223,7 @@ struct ShareImageView: View {
         HStack(spacing: 10) {
             Text(word.categoryEmoji)
                 .font(.system(size: categoryEmojiSize))
-            Text(word.categoryDisplay)
+            Text(displayCategory)
                 .font(.system(size: categoryFontSize, weight: .semibold, design: .serif))
                 .foregroundColor(.white)
         }
@@ -219,7 +234,7 @@ struct ShareImageView: View {
     }
 
     private var themeTitle: some View {
-        Text(word.theme)
+        Text(displayTheme)
             .font(.system(size: themeTitleFontSize, weight: .bold, design: .serif))
             .foregroundColor(.white)
             .multilineTextAlignment(.center)
@@ -241,7 +256,7 @@ struct ShareImageView: View {
     }
 
     private var quoteText: some View {
-        Text("\u{201C}\(word.quote)\u{201D}")
+        Text("\u{201C}\(displayQuote)\u{201D}")
             .font(.system(size: quoteFontSize, weight: .medium, design: .serif))
             .italic()
             .foregroundColor(.white)
@@ -273,10 +288,10 @@ struct ShareImageView: View {
             }
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("Jesus Words")
+                Text(language == .tamil ? "இயேசுவின் வார்த்தைகள்" : "Jesus Words")
                     .font(.system(size: 34, weight: .bold, design: .serif))
                     .foregroundColor(.white)
-                Text("Daily Blessings")
+                Text(language == .tamil ? "தினசரி ஆசீர்வாதங்கள்" : "Daily Blessings")
                     .font(.system(size: 22, weight: .regular, design: .serif))
                     .foregroundColor(.white.opacity(0.55))
             }
@@ -295,20 +310,20 @@ struct ShareImageRenderer {
     }
 
     @MainActor
-    static func renderImage(word: JesusWord, theme: AppTheme) -> UIImage? {
+    static func renderImage(word: JesusWord, theme: AppTheme, language: AppLanguage = .english) -> UIImage? {
         let size = CGSize(width: 1080, height: 1080) // Square IG Post
         let appIcon = loadAppIcon()
-        let view = ShareImageView(word: word, theme: theme, size: size, appIconImage: appIcon)
+        let view = ShareImageView(word: word, theme: theme, size: size, appIconImage: appIcon, language: language)
         let renderer = ImageRenderer(content: view)
         renderer.scale = 1.0
         return renderer.uiImage
     }
 
     @MainActor
-    static func renderSquareImage(word: JesusWord, theme: AppTheme) -> UIImage? {
+    static func renderSquareImage(word: JesusWord, theme: AppTheme, language: AppLanguage = .english) -> UIImage? {
         let size = CGSize(width: 1080, height: 1080) // Square post size
         let appIcon = loadAppIcon()
-        let view = ShareImageView(word: word, theme: theme, size: size, appIconImage: appIcon)
+        let view = ShareImageView(word: word, theme: theme, size: size, appIconImage: appIcon, language: language)
         let renderer = ImageRenderer(content: view)
         renderer.scale = 1.0
         return renderer.uiImage

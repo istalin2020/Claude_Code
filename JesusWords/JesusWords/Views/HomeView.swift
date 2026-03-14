@@ -61,7 +61,7 @@ struct HomeView: View {
                             .foregroundColor(.white)
 
                             // Theme
-                            Text(word.theme)
+                            Text(viewModel.selectedLanguage == .tamil ? (word.tamilTheme ?? word.theme) : word.theme)
                                 .font(.system(size: 18, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                                 .foregroundColor(.white)
 
@@ -102,7 +102,8 @@ struct HomeView: View {
                         Button(action: {
                             if let rendered = ShareImageRenderer.renderImage(
                                 word: word,
-                                theme: viewModel.selectedTheme
+                                theme: viewModel.selectedTheme,
+                                language: viewModel.selectedLanguage
                             ) {
                                 shareableImage = ShareableImage(image: rendered)
                             }

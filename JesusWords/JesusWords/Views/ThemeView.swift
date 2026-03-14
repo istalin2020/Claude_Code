@@ -31,12 +31,12 @@ struct ThemeView: View {
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.3), radius: 5)
 
-            Text("Themes")
+            Text(viewModel.selectedLanguage == .tamil ? "தீம்கள்" : "Themes")
                 .font(.system(size: 32, weight: .bold, design: .serif))
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.3), radius: 5)
 
-            Text("Choose your visual experience")
+            Text(viewModel.selectedLanguage == .tamil ? "உங்கள் காட்சி அனுபவத்தைத் தேர்வுசெய்யுங்கள்" : "Choose your visual experience")
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.8))
         }
@@ -48,7 +48,7 @@ struct ThemeView: View {
             HStack {
                 Image(systemName: "checkmark.seal.fill")
                     .foregroundColor(.white)
-                Text("Current Theme")
+                Text(viewModel.selectedLanguage == .tamil ? "தற்போதைய தீம்" : "Current Theme")
                     .font(.system(size: 16, weight: .semibold, design: .serif))
                     .foregroundColor(.white)
                 Spacer()

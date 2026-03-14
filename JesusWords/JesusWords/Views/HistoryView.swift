@@ -11,10 +11,10 @@ struct HistoryView: View {
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 8) {
-                    Text("History")
+                    Text(viewModel.selectedLanguage == .tamil ? "வரலாறு" : "History")
                         .font(.system(size: 32, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white)
-                    Text("Your Daily Blessings")
+                    Text(viewModel.selectedLanguage == .tamil ? "உங்கள் தினசரி ஆசீர்வாதங்கள்" : "Your Daily Blessings")
                         .font(.subheadline)
                         .foregroundColor(.white.opacity(0.8))
                 }
@@ -27,10 +27,10 @@ struct HistoryView: View {
                         Image(systemName: "book.closed")
                             .font(.system(size: 60))
                             .foregroundColor(.white.opacity(0.5))
-                        Text("No history yet")
+                        Text(viewModel.selectedLanguage == .tamil ? "இதுவரை வரலாறு இல்லை" : "No history yet")
                             .font(.title2)
                             .foregroundColor(.white.opacity(0.7))
-                        Text("Your daily words will appear here")
+                        Text(viewModel.selectedLanguage == .tamil ? "உங்கள் தினசரி வார்த்தைகள் இங்கே தோன்றும்" : "Your daily words will appear here")
                             .font(.body)
                             .foregroundColor(.white.opacity(0.5))
                         Spacer()
@@ -39,7 +39,7 @@ struct HistoryView: View {
                     ScrollView {
                         LazyVStack(spacing: 12) {
                             ForEach(viewModel.history) { entry in
-                                HistoryCard(entry: entry, fontDesign: viewModel.selectedTheme.fontDesign)
+                                HistoryCard(entry: entry, fontDesign: viewModel.selectedTheme.fontDesign, language: viewModel.selectedLanguage)
                                     .onTapGesture {
                                         selectedEntry = entry
                                     }
@@ -61,6 +61,7 @@ struct HistoryView: View {
 struct HistoryCard: View {
     let entry: HistoryEntry
     var fontDesign: Font.Design = .serif
+    var language: AppLanguage = .english
 
     private var dateString: String {
         let formatter = DateFormatter()
@@ -72,7 +73,7 @@ struct HistoryCard: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text(entry.word.categoryEmoji)
-                Text(entry.word.categoryDisplay)
+                Text(language == .tamil ? entry.word.tamilCategoryDisplay : entry.word.categoryDisplay)
                     .font(.system(size: 12, weight: .semibold, design: fontDesign))
                     .foregroundColor(.white.opacity(0.8))
                 Spacer()
@@ -81,11 +82,12 @@ struct HistoryCard: View {
                     .foregroundColor(.white.opacity(0.6))
             }
 
-            Text(entry.word.theme)
+            Text(language == .tamil ? (entry.word.tamilTheme ?? entry.word.theme) : entry.word.theme)
                 .font(.system(size: 16, weight: .bold, design: fontDesign))
                 .foregroundColor(.white)
 
-            Text("\u{201C}\(entry.word.quote)\u{201D}")
+            let displayQuote = (language == .tamil && entry.word.tamilQuote != nil) ? entry.word.tamilQuote! : entry.word.quote
+            Text("\u{201C}\(displayQuote)\u{201D}")
                 .font(.system(size: 14, design: fontDesign))
                 .foregroundColor(.white.opacity(0.9))
                 .lineLimit(3)
@@ -131,11 +133,11 @@ struct HistoryDetailView: View {
                     Text(entry.word.categoryEmoji)
                         .font(.system(size: 44))
 
-                    Text(entry.word.categoryDisplay)
+                    Text(viewModel.selectedLanguage == .tamil ? entry.word.tamilCategoryDisplay : entry.word.categoryDisplay)
                         .font(.system(size: 16, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white.opacity(0.8))
 
-                    Text(entry.word.theme)
+                    Text(viewModel.selectedLanguage == .tamil ? (entry.word.tamilTheme ?? entry.word.theme) : entry.word.theme)
                         .font(.system(size: 24, weight: .bold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white)
 
@@ -143,7 +145,8 @@ struct HistoryDetailView: View {
                         .fill(Color.white.opacity(0.3))
                         .frame(width: 60, height: 2)
 
-                    Text("\u{201C}\(entry.word.quote)\u{201D}")
+                    let displayQuote = (viewModel.selectedLanguage == .tamil && entry.word.tamilQuote != nil) ? entry.word.tamilQuote! : entry.word.quote
+                    Text("\u{201C}\(displayQuote)\u{201D}")
                         .font(.system(size: 22, weight: .medium, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
@@ -161,7 +164,9 @@ struct HistoryDetailView: View {
                         return f
                     }()
 
-                    Text("Shown on \(formatter.string(from: entry.dateShown))")
+                    Text(viewModel.selectedLanguage == .tamil
+                        ? "\(formatter.string(from: entry.dateShown)) அன்று காட்டப்பட்டது"
+                        : "Shown on \(formatter.string(from: entry.dateShown))")
                         .font(.caption)
                         .foregroundColor(.white.opacity(0.6))
                 }
@@ -176,14 +181,15 @@ struct HistoryDetailView: View {
                 Button(action: {
                     if let rendered = ShareImageRenderer.renderImage(
                         word: entry.word,
-                        theme: viewModel.selectedTheme
+                        theme: viewModel.selectedTheme,
+                        language: viewModel.selectedLanguage
                     ) {
                         shareableImage = ShareableImage(image: rendered)
                     }
                 }) {
                     HStack {
                         Image(systemName: "photo.on.rectangle.angled")
-                        Text("Share as Image")
+                        Text(viewModel.selectedLanguage == .tamil ? "படமாகப் பகிரு" : "Share as Image")
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)

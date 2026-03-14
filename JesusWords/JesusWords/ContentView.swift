@@ -40,8 +40,12 @@ struct ContentView: View {
         }
     }
 
+    private var isTamil: Bool { viewModel.selectedLanguage == .tamil }
+
     private func tabButton(icon: String, label: String, tag: Int) -> some View {
-        Button(action: {
+        let tamilLabels = ["இன்று", "வரலாறு", "தீம்கள்", "அமைப்புகள்"]
+        let displayLabel = isTamil ? tamilLabels[tag] : label
+        return Button(action: {
             withAnimation(.easeInOut(duration: 0.2)) {
                 selectedTab = tag
             }
@@ -49,7 +53,7 @@ struct ContentView: View {
             VStack(spacing: 4) {
                 Image(systemName: icon)
                     .font(.system(size: 18))
-                Text(label)
+                Text(displayLabel)
                     .font(.system(size: 10, weight: .medium))
             }
             .foregroundColor(selectedTab == tag ? .white : .white.opacity(0.5))
