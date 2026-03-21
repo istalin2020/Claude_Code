@@ -17,32 +17,29 @@ struct HomeView: View {
 
             ScrollView {
                 VStack(spacing: 24) {
-                    Spacer().frame(height: 20)
+                    Spacer().frame(height: 8)
 
-                    // App Title + Language Toggle
-                    ZStack {
-                        // Center: App Title
-                        VStack(spacing: 4) {
-                            LatinCrossIcon(size: 36)
-                                .foregroundColor(.white)
-                                .shadow(color: .black.opacity(0.3), radius: 5)
-
-                            Text(viewModel.selectedLanguage == .tamil ? "இயேசுவின் வார்த்தைகள்" : "Jesus Words")
-                                .font(.system(size: 32, weight: .bold, design: viewModel.selectedTheme.fontDesign))
-                                .foregroundColor(.white)
-                                .shadow(color: .black.opacity(0.3), radius: 5)
+                    // Language Toggle at top
+                    HStack {
+                        Spacer()
+                        LanguageToggle(selectedLanguage: $viewModel.selectedLanguage) { language in
+                            viewModel.setLanguage(language)
                         }
-
-                        // Top Right: Language Toggle
-                        HStack {
-                            Spacer()
-                            LanguageToggle(selectedLanguage: $viewModel.selectedLanguage) { language in
-                                viewModel.setLanguage(language)
-                            }
-                        }
-                        .padding(.trailing, 8)
                     }
-                    .padding(.top, 10)
+                    .padding(.trailing, 20)
+                    .padding(.top, 4)
+
+                    // App Title
+                    VStack(spacing: 4) {
+                        LatinCrossIcon(size: 36)
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.3), radius: 5)
+
+                        Text(viewModel.selectedLanguage == .tamil ? "இயேசுவின் வார்த்தைகள்" : "Jesus Words")
+                            .font(.system(size: 32, weight: .bold, design: viewModel.selectedTheme.fontDesign))
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.3), radius: 5)
+                    }
                     .padding(.horizontal, 20)
 
                     // Today's Word Card
@@ -80,7 +77,8 @@ struct HomeView: View {
                                 .padding(.horizontal, 8)
 
                             // Reference
-                            Text("— \(word.reference)")
+                            let displayRef = (viewModel.selectedLanguage == .tamil && word.tamilReference != nil) ? word.tamilReference! : word.reference
+                            Text("— \(displayRef)")
                                 .font(.system(size: 16, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                                 .foregroundColor(.white.opacity(0.85))
                                 .italic()
@@ -252,7 +250,8 @@ struct ExplanationView: View {
                             .multilineTextAlignment(.center)
                             .lineSpacing(4)
 
-                        Text("— \(word.reference)")
+                        let displayRef = (language == .tamil && word.tamilReference != nil) ? word.tamilReference! : word.reference
+                        Text("— \(displayRef)")
                             .font(.system(size: 14, weight: .semibold, design: theme.fontDesign))
                             .foregroundColor(.white.opacity(0.85))
                             .italic()

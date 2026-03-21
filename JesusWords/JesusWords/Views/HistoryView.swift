@@ -93,7 +93,8 @@ struct HistoryCard: View {
                 .lineLimit(3)
                 .lineSpacing(3)
 
-            Text("— \(entry.word.reference)")
+            let displayRef = (language == .tamil && entry.word.tamilReference != nil) ? entry.word.tamilReference! : entry.word.reference
+            Text("— \(displayRef)")
                 .font(.system(size: 13, weight: .medium, design: fontDesign))
                 .foregroundColor(.white.opacity(0.7))
                 .italic()
@@ -153,7 +154,8 @@ struct HistoryDetailView: View {
                         .lineSpacing(8)
                         .padding(.horizontal, 20)
 
-                    Text("— \(entry.word.reference)")
+                    let detailRef = (viewModel.selectedLanguage == .tamil && entry.word.tamilReference != nil) ? entry.word.tamilReference! : entry.word.reference
+                    Text("— \(detailRef)")
                         .font(.system(size: 18, weight: .semibold, design: viewModel.selectedTheme.fontDesign))
                         .foregroundColor(.white.opacity(0.85))
                         .italic()

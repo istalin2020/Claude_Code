@@ -266,8 +266,13 @@ struct ShareImageView: View {
             .shadow(color: .black.opacity(0.1), radius: 2)
     }
 
+    private var displayReference: String {
+        if language == .tamil, let tr = word.tamilReference { return tr }
+        return word.reference
+    }
+
     private var referenceText: some View {
-        Text("— \(word.reference)")
+        Text("— \(displayReference)")
             .font(.system(size: referenceFontSize, weight: .semibold, design: .serif))
             .italic()
             .foregroundColor(.white.opacity(0.80))

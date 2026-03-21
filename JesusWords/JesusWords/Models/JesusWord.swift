@@ -9,6 +9,7 @@ struct JesusWord: Codable, Identifiable, Equatable {
     let theme: String
     let tamilQuote: String?
     let tamilTheme: String?
+    let tamilReference: String?
     let explanation: String?
     let tamilExplanation: String?
 
