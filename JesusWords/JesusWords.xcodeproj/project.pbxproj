@@ -23,6 +23,7 @@
 		A10000010000000000000014 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000014; };
 		A10000010000000000000015 /* ShareImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000015; };
 		A10000010000000000000016 /* LatinCrossShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000016; };
+		A10000010000000000000017 /* jesus_words_ta.json in Resources */ = {isa = PBXBuildFile; fileRef = A10000020000000000000017; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		A10000020000000000000014 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		A10000020000000000000015 /* ShareImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareImageView.swift; sourceTree = "<group>"; };
 		A10000020000000000000016 /* LatinCrossShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatinCrossShape.swift; sourceTree = "<group>"; };
+		A10000020000000000000017 /* jesus_words_ta.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = jesus_words_ta.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000020000000000000011 /* jesus_words.json */,
+				A10000020000000000000017 /* jesus_words_ta.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000010000000000000011 /* jesus_words.json in Resources */,
+				A10000010000000000000017 /* jesus_words_ta.json in Resources */,
 				A10000010000000000000012 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
