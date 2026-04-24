@@ -38,6 +38,7 @@ class WordsViewModel: ObservableObject {
     func setLanguage(_ language: AppLanguage) {
         selectedLanguage = language
         UserDefaults.standard.set(language.rawValue, forKey: languageKey)
+        rescheduleNotifications()
     }
 
     private func loadLanguage() {
@@ -87,7 +88,8 @@ class WordsViewModel: ObservableObject {
         if hour > 0 || minute > 0 {
             NotificationManager.shared.scheduleDailyNotifications(
                 hour: hour, minute: minute,
-                allWords: allWords
+                allWords: allWords,
+                language: selectedLanguage
             )
         }
     }
@@ -113,7 +115,19 @@ class WordsViewModel: ObservableObject {
 
         NotificationManager.shared.scheduleDailyNotifications(
             hour: hour, minute: minute,
-            allWords: allWords
+            allWords: allWords,
+            language: selectedLanguage
+        )
+    }
+
+    private func rescheduleNotifications() {
+        let hour = UserDefaults.standard.integer(forKey: "reminderHour")
+        let minute = UserDefaults.standard.integer(forKey: "reminderMinute")
+        guard hour > 0 || minute > 0 else { return }
+        NotificationManager.shared.scheduleDailyNotifications(
+            hour: hour, minute: minute,
+            allWords: allWords,
+            language: selectedLanguage
         )
     }
 

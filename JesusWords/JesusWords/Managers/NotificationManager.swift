@@ -19,28 +19,28 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
     }
 
     /// Schedule notifications for the next 7 days, each with the correct word for that day.
-    func scheduleDailyNotifications(hour: Int, minute: Int, allWords: [JesusWord]) {
+    func scheduleDailyNotifications(hour: Int, minute: Int, allWords: [JesusWord], language: AppLanguage) {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
 
         guard !allWords.isEmpty else { return }
 
+        let isTamil = language == .tamil
+
         for dayOffset in 0..<7 {
             guard let futureDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: Date()) else { continue }
 
-            // Calculate the correct word for this specific future date
             let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: futureDate) ?? 1
             let wordIndex = (dayOfYear - 1) % allWords.count
             let word = allWords[wordIndex]
 
             let content = UNMutableNotificationContent()
-            content.title = "✝️ Jesus Words"
-            content.subtitle = word.reference
-            content.body = word.quote
+            content.title = isTamil ? "✝️ இயேசுவின் வார்த்தைகள்" : "✝️ Jesus Words"
+            content.subtitle = isTamil ? (word.tamilReference ?? word.reference) : word.reference
+            content.body = isTamil ? (word.tamilQuote ?? word.quote) : word.quote
             content.sound = .default
             content.badge = 1
 
-            // Use exact date (year/month/day/hour/minute) — non-repeating
             var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: futureDate)
             dateComponents.hour = hour
             dateComponents.minute = minute
