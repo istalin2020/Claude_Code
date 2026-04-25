@@ -245,12 +245,12 @@ struct ShareImageView: View {
             }
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(language == .tamil ? "இயேசுவின் வார்த்தைகள்" : "Jesus Words")
+                Text("Jesus Words")
                     .font(.system(size: 34, weight: .bold, design: .serif))
                     .foregroundColor(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
-                Text(language == .tamil ? "தினசரி ஆசீர்வாதங்கள்" : "Daily Blessings")
+                Text("Daily Blessings")
                     .font(.system(size: 22, weight: .regular, design: .serif))
                     .foregroundColor(.white.opacity(0.55))
                     .lineLimit(1)
