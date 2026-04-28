@@ -4,7 +4,6 @@ struct ReminderSetupView: View {
     @EnvironmentObject var viewModel: WordsViewModel
     @Binding var hasCompletedSetup: Bool
     @State private var selectedTime = Date()
-    @State private var showingPermissionAlert = false
     @State private var currentPage = 0
 
     var body: some View {
@@ -13,9 +12,7 @@ struct ReminderSetupView: View {
 
             VStack {
                 TabView(selection: $currentPage) {
-                    // Welcome Page
                     welcomePage.tag(0)
-                    // Reminder Setup Page
                     reminderPage.tag(1)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .always))
@@ -42,7 +39,7 @@ struct ReminderSetupView: View {
 
             VStack(alignment: .leading, spacing: 12) {
                 featureRow(icon: "sun.max.fill", text: "365 Jesus-spoken words")
-                featureRow(icon: "bell.fill", text: "Daily morning reminders")
+                featureRow(icon: "bell.fill", text: "Optional daily reminders")
                 featureRow(icon: "clock.fill", text: "History of all blessings")
                 featureRow(icon: "square.and.arrow.up", text: "Share with loved ones")
             }
@@ -80,7 +77,7 @@ struct ReminderSetupView: View {
                 .font(.system(size: 28, weight: .bold, design: .serif))
                 .foregroundColor(.white)
 
-            Text("Choose when you'd like to receive\nyour daily blessing")
+            Text("Choose when you'd like to receive\nyour daily blessing (optional)")
                 .font(.system(size: 16, design: .serif))
                 .foregroundColor(.white.opacity(0.8))
                 .multilineTextAlignment(.center)
@@ -93,25 +90,28 @@ struct ReminderSetupView: View {
 
             Spacer()
 
-            Button(action: setupReminder) {
-                Text("Start My Journey")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        Capsule()
-                            .fill(Color.white.opacity(0.25))
-                            .overlay(Capsule().stroke(Color.white.opacity(0.5), lineWidth: 1))
-                    )
+            VStack(spacing: 14) {
+                Button(action: setupReminder) {
+                    Text("Enable Reminders")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.25))
+                                .overlay(Capsule().stroke(Color.white.opacity(0.5), lineWidth: 1))
+                        )
+                }
+
+                Button(action: skipReminder) {
+                    Text("Skip for Now")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white.opacity(0.7))
+                }
             }
             .padding(.horizontal, 40)
             .padding(.bottom, 60)
-        }
-        .alert("Notifications Required", isPresented: $showingPermissionAlert) {
-            Button("OK") {}
-        } message: {
-            Text("Please enable notifications in Settings to receive daily blessings.")
         }
     }
 
@@ -135,12 +135,16 @@ struct ReminderSetupView: View {
         NotificationManager.shared.requestPermission { granted in
             if granted {
                 viewModel.setReminder(hour: hour, minute: minute)
-                withAnimation {
-                    hasCompletedSetup = true
-                }
-            } else {
-                showingPermissionAlert = true
             }
+            withAnimation {
+                hasCompletedSetup = true
+            }
+        }
+    }
+
+    private func skipReminder() {
+        withAnimation {
+            hasCompletedSetup = true
         }
     }
 }
